@@ -17,6 +17,8 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.DemoApplication;
+import com.example.models.Account;
+import com.example.models.AccountDao;
 import com.example.models.Rate;
 import com.example.models.RateDao;
 
@@ -29,6 +31,9 @@ public class RateServiceImpl implements RateService {
 	
 	@Autowired
 	private RateDao repository;
+	
+	@Autowired
+	private AccountDao accountRepository;
 	
 	public List<Rate> findAll() {
 		List<Rate> rates = (List<Rate>) repository.findAll();
@@ -134,5 +139,6 @@ public class RateServiceImpl implements RateService {
 		saveRatesToDb(getAllRatesByDate(start, end, "RUB"));
 		saveRatesToDb(getAllRatesByDate(start, end, "XAU"));
 		saveRatesToDb(getAllRatesByDate(start, end, "XAG"));
+		accountRepository.save(new Account("rbaxter", "password"));
 	}
 }
