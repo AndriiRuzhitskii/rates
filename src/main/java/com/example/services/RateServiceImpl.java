@@ -32,9 +32,6 @@ public class RateServiceImpl implements RateService {
 	@Autowired
 	private RateDao repository;
 	
-	@Autowired
-	private AccountDao accountRepository;
-	
 	public List<Rate> findAll() {
 		List<Rate> rates = (List<Rate>) repository.findAll();
 		return rates;
@@ -139,6 +136,5 @@ public class RateServiceImpl implements RateService {
 		saveRatesToDb(getAllRatesByDate(start, end, "RUB"));
 		saveRatesToDb(getAllRatesByDate(start, end, "XAU"));
 		saveRatesToDb(getAllRatesByDate(start, end, "XAG"));
-		accountRepository.save(new Account("rbaxter", "password"));
 	}
 }
