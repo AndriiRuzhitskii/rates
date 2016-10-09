@@ -2,6 +2,8 @@ package com.example.services;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,19 +21,26 @@ import org.springframework.web.client.RestTemplate;
 import com.example.DemoApplication;
 import com.example.models.Account;
 import com.example.models.AccountDao;
+import com.example.models.Currency;
+import com.example.models.CurrencyDao;
 import com.example.models.Rate;
 import com.example.models.RateDao;
+import com.example.models.RateNbu;
 
 @Service
 public class RateServiceImpl implements RateService {
 	
 	private static final String NBU_URL = "http://bank.gov.ua/NBUStatService/v1/statdirectory/exchange";
+	private static final String NBU_URL_ONGOING_DATE = "http://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
 	private static StringBuilder sb = new StringBuilder();
 	private static final Logger log = LoggerFactory.getLogger(DemoApplication.class);
 	
 	@Autowired
 	private RateDao repository;
 	
+	@Autowired
+	private CurrencyDao currencyRepository;
+
 	public List<Rate> findAll() {
 		List<Rate> rates = (List<Rate>) repository.findAll();
 		return rates;
@@ -78,6 +87,16 @@ public class RateServiceImpl implements RateService {
     	} else {
 			r = rate[0];
     	}
+    	Currency currency = new Currency();
+    	currency.setR030((short)840);
+    	currency.setTxt("Долар США");
+    	currency.setCc("USD");
+    	currency.setRates(new ArrayList());
+    	// {"r030":840,"txt":"Долар США","cc":"USD""currency":null}
+    	
+    	currencyRepository.save(currency);
+    	
+    	r.setCurrency(currency);
 		return r;	
 	}
 	
@@ -105,17 +124,18 @@ public class RateServiceImpl implements RateService {
 				.collect(Collectors.toList());
 		
 		result.putAll(dateList.stream().collect(Collectors.toMap(d -> d, d -> getRateByDate(d, cc))));
-		
+		// TODO May be change output type
 		return result;
 	}
 	
 	public boolean saveRatesToDb(Map<String, Rate> rates) {
+		// TODO May be change input param type
 		List<Rate> list = rates.entrySet().stream().map(map -> map.getValue())
                 .collect(Collectors.toList());
 //		list.stream().forEach(System.out::println);
 		list.stream().forEach(d -> repository.save(d));
 
-		return true;
+		return true; // TODO Change return
 	}
 	
 
@@ -137,4 +157,78 @@ public class RateServiceImpl implements RateService {
 		saveRatesToDb(getAllRatesByDate(start, end, "XAU"));
 		saveRatesToDb(getAllRatesByDate(start, end, "XAG"));
 	}
+
+	@Override
+	public List<Rate> getAllRatesByOngoingDate() {
+		
+		Rate[] rate = {};
+		RestTemplate restTemplate = new RestTemplate();
+		try {
+    		rate = restTemplate.getForObject(NBU_URL_ONGOING_DATE, Rate[].class);
+        } catch (RuntimeException e) {
+        	return new ArrayList<Rate>();
+        }
+		
+		List<Rate> list = Arrays.asList(rate);
+	
+		return list;
+	}
+
+	@Override
+	public RateNbu getRateNbuByDate(String date, String cc) {
+		RateNbu r;
+		RateNbu[] rate = {};
+		RestTemplate restTemplate = new RestTemplate();
+		try {
+    		rate = restTemplate.getForObject(getUrl(date, cc), RateNbu[].class);
+        } catch (RuntimeException e) {
+        	r = new RateNbu();
+        }
+    	if(rate.length == 0) {
+    		r = new RateNbu();
+    	} else {
+			r = rate[0];
+    	}
+    	Currency currency = new Currency();
+    	currency.setR030((short)840);
+    	currency.setTxt("Долар США");
+    	currency.setCc("USD");
+    	currency.setRates(new ArrayList());
+    	// {"r030":840,"txt":"Долар США","cc":"USD""currency":null}
+    	
+    	currencyRepository.save(currency);
+    	
+    	r.setCurrency(currency);
+		return r;	
+	}
+
+	@Override
+	public Rate getRateFromRateNbu(RateNbu rateNbu) {
+		Rate r;
+		Rate[] rate = {};
+		RestTemplate restTemplate = new RestTemplate();
+		try {
+    		//rate = restTemplate.getForObject(getUrl(date, cc), Rate[].class);
+        } catch (RuntimeException e) {
+        	r = new Rate();
+        }
+    	if(rate.length == 0) {
+    		r = new Rate();
+    	} else {
+			r = rate[0];
+    	}
+    	Currency currency = new Currency();
+    	currency.setR030((short)840);
+    	currency.setTxt("Долар США");
+    	currency.setCc("USD");
+    	currency.setRates(new ArrayList());
+    	// {"r030":840,"txt":"Долар США","cc":"USD""currency":null}
+    	
+    	currencyRepository.save(currency);
+    	
+    	r.setCurrency(currency);
+		return r;	
+	}
+
+
 }

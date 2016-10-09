@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.example.models.Rate;
 import com.example.models.RateDao;
+import com.example.models.RateNbu;
 
 public interface RateService {
 	public List<Rate> findAll();
@@ -21,10 +22,17 @@ public interface RateService {
 	public Rate getMin(String cc);
 	
 	public Rate getRateByDate(String date, String cc);
-
+	
+	public RateNbu getRateNbuByDate(String date, String cc);
+	
+	public Rate getRateFromRateNbu(RateNbu rateNbu);
+	
 	public void setRepository(RateDao repository);
 
 	public RateDao getRepository();
 
 	public Map<String, Rate> getAllRatesByDate(LocalDate start, LocalDate end, String cc);
+	
+	public List<Rate> getAllRatesByOngoingDate();
+		
 }

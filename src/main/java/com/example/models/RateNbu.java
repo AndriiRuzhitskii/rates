@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 //@JsonSerialize
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-public class Rate {
+public class RateNbu {
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
@@ -29,10 +29,10 @@ public class Rate {
 //    @JsonIgnore
 	private Currency currency;
 
-	public Rate() {
+	public RateNbu() {
 	} 
 	
-	public Rate(short r030, String txt, float rate, String cc,
+	public RateNbu(short r030, String txt, float rate, String cc,
 			String exchangedate) {
 		super();
 		this.r030 = r030;
@@ -50,7 +50,7 @@ public class Rate {
 		this.currency = currency;
 	}
 
-	public Rate(String cc) {
+	public RateNbu(String cc) {
 		this.setCc(cc);
 	} 
 	
@@ -99,7 +99,7 @@ public class Rate {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Rate other = (Rate) obj;
+		RateNbu other = (RateNbu) obj;
 		if (cc == null) {
 			if (other.cc != null)
 				return false;
