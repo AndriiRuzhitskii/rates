@@ -21,11 +21,9 @@ public interface RateService {
 	
 	public Rate getMin(String cc);
 	
+//	public Rate getRateByDate(String date, String cc);
+	
 	public Rate getRateByDate(String date, String cc);
-	
-	public RateNbu getRateNbuByDate(String date, String cc);
-	
-	public Rate getRateFromRateNbu(RateNbu rateNbu);
 	
 	public void setRepository(RateDao repository);
 
@@ -33,6 +31,6 @@ public interface RateService {
 
 	public Map<String, Rate> getAllRatesByDate(LocalDate start, LocalDate end, String cc);
 	
-	public List<Rate> getAllRatesByOngoingDate();
+	public List<RateNbu> getAllRatesByOngoingDate();
 		
 }

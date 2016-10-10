@@ -1,33 +1,12 @@
 package com.example.models;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-//import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-//import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-//@JsonSerialize
-@JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
 public class RateNbu {
-	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
 	private short r030;
 	private String txt;
 	private float rate;
 	private String cc;
 	private String exchangedate;
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="currency_id")
-//    @JsonIgnore
-	private Currency currency;
 
 	public RateNbu() {
 	} 
@@ -40,14 +19,6 @@ public class RateNbu {
 		this.rate = rate;
 		this.cc = cc;
 		this.exchangedate = exchangedate;
-	}
-
-	public Currency getCurrency() {
-		return currency;
-	}
-
-	public void setCurrency(Currency currency) {
-		this.currency = currency;
 	}
 
 	public RateNbu(String cc) {

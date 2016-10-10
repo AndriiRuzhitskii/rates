@@ -1,16 +1,16 @@
 package com.example.services;
 
 import java.util.List;
-import java.util.Map;
-
+import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.DemoApplication;
+import com.example.converters.RateNbuConverter;
 import com.example.models.Currency;
-import com.example.models.Rate;
+import com.example.models.CurrencyDao;
+import com.example.models.RateNbu;
 
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
@@ -19,18 +19,35 @@ public class CurrencyServiceImpl implements CurrencyService {
 	@Autowired
 	private RateService rateService; 
 	
+	@Autowired
+	private CurrencyDao currencyDao;
+	
+	@Resource
+	private RateNbuConverter rateNbuConverter;
+	
 	@Override
 	public List<Currency> getAllCurrenciesOngoingDate() {
-		
-		List<Rate> rates = rateService.getAllRatesByOngoingDate();
-		rates.forEach(System.out::println);
-		return null;
+		List<Currency> currencys;
+		List<RateNbu> rates = rateService.getAllRatesByOngoingDate();	
+		currencys = rateNbuConverter.convertList(rates);
+		return currencys;
 	}
 
 	@Override
 	public boolean saveCurrenciesToDb(List<Currency> currencies) {
-		// TODO Auto-generated method stub
+		currencies.stream().forEach(d -> currencyDao.save(d));
 		return true;
+	}
+
+	@Override
+	public boolean getCurrencies() {
+		saveCurrenciesToDb(getAllCurrenciesOngoingDate());
+		return true;
+	}
+
+	@Override
+	public List<Currency> getCurrenciesFromDb() {
+		return (List<Currency>) currencyDao.findAll();
 	}
 	
 }

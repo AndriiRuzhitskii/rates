@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "rates"})
 @Entity
 public class Currency {
 	@Id
@@ -117,6 +117,12 @@ public class Currency {
 		} else if (!txt.equals(other.txt))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Currency [id=" + id + ", r030=" + r030 + ", txt=" + txt
+				+ ", cc=" + cc + "]";
 	} 
 	
 }

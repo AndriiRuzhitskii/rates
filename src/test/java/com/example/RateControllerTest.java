@@ -96,11 +96,11 @@ public class RateControllerTest {
     public void setup() {
     	this.mockMvc = webAppContextSetup(webApplicationContext).build();
     	repository.deleteAll();
-    	repository.save(new Rate((short)840,"Долар США",(float)24.806543,"USD","01.08.2016"));
-    	repository.save(new Rate((short)978,"Євро",(float)27.668327,"EUR","02.08.2016"));
-    	repository.save(new Rate((short)643,"Російський рубль",(float)0.37115,"RUB","03.08.2016"));
-    	repository.save(new Rate((short)959,"Золото",(float)33722.473,"XAU","04.08.2016"));
-    	repository.save(new Rate((short)961,"Срiбло",(float)500.151,"XAG","05.08.2016"));    	
+//    	repository.save(new Rate((short)840,"Долар США",(float)24.806543,"USD","01.08.2016"));
+//    	repository.save(new Rate((short)978,"Євро",(float)27.668327,"EUR","02.08.2016"));
+//    	repository.save(new Rate((short)643,"Російський рубль",(float)0.37115,"RUB","03.08.2016"));
+//    	repository.save(new Rate((short)959,"Золото",(float)33722.473,"XAU","04.08.2016"));
+//    	repository.save(new Rate((short)961,"Срiбло",(float)500.151,"XAG","05.08.2016"));    	
     }
     
 	@Test
