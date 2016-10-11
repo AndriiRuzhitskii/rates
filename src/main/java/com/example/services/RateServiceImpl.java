@@ -153,7 +153,7 @@ public class RateServiceImpl implements RateService {
 
 	public void getNbuRates() {
 		log.info("getNbuRates()");
-		LocalDate start = LocalDate.parse("2016-09-20"), // 1998-01-01
+		LocalDate start = LocalDate.parse("2016-10-01"), // 1998-01-01
 		end = LocalDate.now();
 		saveRatesToDb(getAllRatesByDate(start, end, "USD"));
 		saveRatesToDb(getAllRatesByDate(start, end, "EUR"));
