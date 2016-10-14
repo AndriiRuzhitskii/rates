@@ -41,6 +41,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
 	@Override
 	public boolean getCurrencies() {
+		log.info("getCurrencies()");
 		saveCurrenciesToDb(getAllCurrenciesOngoingDate());
 		return true;
 	}

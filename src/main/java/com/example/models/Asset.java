@@ -3,11 +3,18 @@ package com.example.models;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
+import com.example.CustomerDateAndTimeDeserialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
@@ -17,16 +24,27 @@ public class Asset {
     @GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	private float amount;
+	@JsonDeserialize(using=CustomerDateAndTimeDeserialize.class)
 	private LocalDate date;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="currency_id")
 	private Currency currency;
+	@ManyToOne(optional = true, fetch=FetchType.LAZY)
+	@JoinColumn(name="account_id")
+	@JsonIgnore
+	private Account account;
+	@Transient
+	private String currencyName;
 	
 	public Asset() {}
 
-	public Asset(float amount, LocalDate date, Currency currency) {
+	public Asset(float amount, LocalDate date, Currency currency,
+			Account account) {
 		super();
 		this.amount = amount;
 		this.date = date;
 		this.currency = currency;
+		this.account = account;
 	}
 
 	public long getId() {
@@ -61,10 +79,27 @@ public class Asset {
 		this.currency = currency;
 	}
 
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	public String getCurrencyName() {
+		return currencyName;
+	}
+
+	public void setCurrencyName(String currencyName) {
+		this.currencyName = currencyName;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((account == null) ? 0 : account.hashCode());
 		result = prime * result + Float.floatToIntBits(amount);
 		result = prime * result
 				+ ((currency == null) ? 0 : currency.hashCode());
@@ -82,6 +117,11 @@ public class Asset {
 		if (getClass() != obj.getClass())
 			return false;
 		Asset other = (Asset) obj;
+		if (account == null) {
+			if (other.account != null)
+				return false;
+		} else if (!account.equals(other.account))
+			return false;
 		if (Float.floatToIntBits(amount) != Float.floatToIntBits(other.amount))
 			return false;
 		if (currency == null) {
@@ -102,7 +142,7 @@ public class Asset {
 	@Override
 	public String toString() {
 		return "Asset [id=" + id + ", amount=" + amount + ", date=" + date
-				+ ", currency=" + currency + "]";
+				+ ", currency=" + currency + ", account=" + account + "]";
 	}
 	
 }

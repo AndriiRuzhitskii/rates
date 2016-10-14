@@ -111,10 +111,13 @@ public class RateServiceImpl implements RateService {
         sb.append( "&date=" );      
         sb.append( date );
         sb.append( "&json" );
+        log.info("getUrl() = " + sb.toString()); 
 		return sb.toString();	
 	}
 	
 	public Map<String, Rate> getAllRatesByDate(LocalDate start, LocalDate end, String cc) {
+		
+		log.info("getAllRatesByDate() cc = " + cc);
 		
 		Map<String, Rate> result = new HashMap();
 		
@@ -133,10 +136,13 @@ public class RateServiceImpl implements RateService {
 	}
 	
 	public boolean saveRatesToDb(Map<String, Rate> rates) {
+		
+		log.info("saveRatesToDb() rates.size() = " + rates.size());
+		
 		// TODO May be change input param type
 		List<Rate> list = rates.entrySet().stream().map(map -> map.getValue())
                 .collect(Collectors.toList());
-//		list.stream().forEach(System.out::println);
+		list.stream().forEach(System.out::println);
 		list.stream().forEach(d -> repository.save(d));
 
 		return true; // TODO Change return
@@ -153,7 +159,7 @@ public class RateServiceImpl implements RateService {
 
 	public void getNbuRates() {
 		log.info("getNbuRates()");
-		LocalDate start = LocalDate.parse("2016-10-01"), // 1998-01-01
+		LocalDate start = LocalDate.parse("2016-10-11"), // 1998-01-01
 		end = LocalDate.now();
 		saveRatesToDb(getAllRatesByDate(start, end, "USD"));
 		saveRatesToDb(getAllRatesByDate(start, end, "EUR"));
@@ -180,6 +186,9 @@ public class RateServiceImpl implements RateService {
 
 	@Override
 	public Rate getRateByDate(String date, String cc) {
+		
+		log.info("getRateByDate() date = " + date + " cc = " + cc); 
+		
 		RateNbu r;
 		RateNbu[] rate = {};
 		RestTemplate restTemplate = new RestTemplate();

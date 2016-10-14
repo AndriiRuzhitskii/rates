@@ -31,9 +31,8 @@ public class RateController {
 	private RateService service;
     
     @RequestMapping("/rate")
-    List<Rate> getRate(@AuthenticationPrincipal final UserDetails user) {
+    List<Rate> getRate() {
     	List<Rate> rates = (List<Rate>) service.findAll();
-    	log.info("User " + user.getUsername());
     	return rates;
     }
     

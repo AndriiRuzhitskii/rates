@@ -1,9 +1,14 @@
 package com.example.models;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -13,16 +18,20 @@ public class Account {
 	
 	public Account(){}
 	
-	public Account(String username, String password) {
-		this.username = username;
-		this.password = password;
-	}
-	
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
 	private String username;
 	private String password;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "account")
+	private List<Asset> asset;
+		
+	public Account(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
+	}
+	
 	public long getId() {
 		return id;
 	}
@@ -41,6 +50,12 @@ public class Account {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public List<Asset> getAsset() {
+		return asset;
+	}
+	public void setAsset(List<Asset> asset) {
+		this.asset = asset;
+	}
 	@Override
 	public String toString() {
 		return "Account [id=" + id + ", username=" + username + ", password="
@@ -50,6 +65,7 @@ public class Account {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((asset == null) ? 0 : asset.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result
 				+ ((password == null) ? 0 : password.hashCode());
@@ -66,6 +82,11 @@ public class Account {
 		if (getClass() != obj.getClass())
 			return false;
 		Account other = (Account) obj;
+		if (asset == null) {
+			if (other.asset != null)
+				return false;
+		} else if (!asset.equals(other.asset))
+			return false;
 		if (id != other.id)
 			return false;
 		if (password == null) {
