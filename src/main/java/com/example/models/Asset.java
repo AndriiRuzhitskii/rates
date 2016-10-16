@@ -11,7 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import com.example.CustomerDateAndTimeDeserialize;
+import com.example.deserializers.CurrencyDeserializer;
+import com.example.deserializers.DateAndTimeDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -24,17 +25,18 @@ public class Asset {
     @GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	private float amount;
-	@JsonDeserialize(using=CustomerDateAndTimeDeserialize.class)
+	@JsonDeserialize(using=DateAndTimeDeserializer.class)
 	private LocalDate date;
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="currency_id")
+	@ManyToOne(fetch=FetchType.LAZY)
+  	@JoinColumn(name="currency_id")
+	@JsonDeserialize(using=CurrencyDeserializer.class)
 	private Currency currency;
 	@ManyToOne(optional = true, fetch=FetchType.LAZY)
 	@JoinColumn(name="account_id")
 	@JsonIgnore
 	private Account account;
-	@Transient
-	private String currencyName;
+//	@Transient
+//	private String currencyName;
 	
 	public Asset() {}
 
@@ -87,13 +89,13 @@ public class Asset {
 		this.account = account;
 	}
 
-	public String getCurrencyName() {
-		return currencyName;
-	}
-
-	public void setCurrencyName(String currencyName) {
-		this.currencyName = currencyName;
-	}
+//	public String getCurrencyName() {
+//		return currencyName;
+//	}
+//
+//	public void setCurrencyName(String currencyName) {
+//		this.currencyName = currencyName;
+//	}
 
 	@Override
 	public int hashCode() {

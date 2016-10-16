@@ -14,4 +14,5 @@ public interface AssetService {
 	public Asset create(@RequestBody Asset asset, final UserDetails user);
 	public void delete(@PathVariable Long id, final UserDetails user);
 	public Asset update(@PathVariable Long id, @RequestBody Asset asset, final UserDetails user);
+	public Asset getById(@PathVariable Long id, final UserDetails user);
 }

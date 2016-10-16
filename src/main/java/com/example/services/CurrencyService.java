@@ -8,4 +8,5 @@ public interface CurrencyService {
 	public boolean saveCurrenciesToDb(List<Currency> currencies); 
 	public boolean getCurrencies();
 	public List<Currency> getCurrenciesFromDb();
+	public Currency getCurrencyByCc(String cc);
 }

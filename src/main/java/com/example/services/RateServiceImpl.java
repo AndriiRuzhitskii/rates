@@ -10,14 +10,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+
 import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
 import com.example.DemoApplication;
 import com.example.converters.RateConverter;
+import com.example.models.Currency;
 import com.example.models.CurrencyDao;
 import com.example.models.Rate;
 import com.example.models.RateDao;
@@ -159,7 +163,7 @@ public class RateServiceImpl implements RateService {
 
 	public void getNbuRates() {
 		log.info("getNbuRates()");
-		LocalDate start = LocalDate.parse("2016-10-11"), // 1998-01-01
+		LocalDate start = LocalDate.parse("2016-10-01"), // 1998-01-01
 		end = LocalDate.now();
 		saveRatesToDb(getAllRatesByDate(start, end, "USD"));
 		saveRatesToDb(getAllRatesByDate(start, end, "EUR"));
@@ -204,6 +208,13 @@ public class RateServiceImpl implements RateService {
     	}    
     	Rate result = rateConverter.convert(r);
 		return result;	
+	}
+
+	@Override
+	public Rate getRateByDateFromDb(LocalDate date, Currency currency) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+		String formattedString = date.format(formatter);	
+		return repository.findByExchangedateAndCurrency(formattedString, currency);
 	}
 
 }

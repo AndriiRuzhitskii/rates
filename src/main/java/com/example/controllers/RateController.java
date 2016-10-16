@@ -41,7 +41,7 @@ public class RateController {
     	List<Rate> rates = (List<Rate>) service.findByCc(name);
     	return rates;
     }
-      
+    
     @RequestMapping("/ratebydate")
     List<Rate> getRateByDate(@RequestParam(value="date", defaultValue="01.01.2016") String date) {
     	System.out.println("date = " + date);

@@ -54,8 +54,19 @@ public class AssetServiceImpl implements AssetService {
 		as.setAmount(asset.getAmount());
 		as.setCurrency(asset.getCurrency());
 		as.setDate(asset.getDate());
-		if(as.getAccount().getUsername().equalsIgnoreCase(user.getUsername()))
+		if(as.getAccount().getUsername().equalsIgnoreCase(user.getUsername())) {
 			repository.save(as);
-		return as;
+			return as;
+		}
+		return null;
+	}
+
+	@Override
+	public Asset getById(Long id, UserDetails user) {
+		log.info("User " + user.getUsername());
+		Asset as = repository.findOne(id);
+		if(as.getAccount().getUsername().equalsIgnoreCase(user.getUsername()))
+			return as;
+		return null;
 	}
 }

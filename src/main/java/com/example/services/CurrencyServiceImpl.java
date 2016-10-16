@@ -1,11 +1,14 @@
 package com.example.services;
 
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.example.DemoApplication;
 import com.example.converters.RateNbuConverter;
 import com.example.models.Currency;
@@ -49,6 +52,11 @@ public class CurrencyServiceImpl implements CurrencyService {
 	@Override
 	public List<Currency> getCurrenciesFromDb() {
 		return (List<Currency>) currencyDao.findAll();
+	}
+
+	@Override
+	public Currency getCurrencyByCc(String cc) {
+		return currencyDao.findByCc(cc);
 	}
 	
 }
