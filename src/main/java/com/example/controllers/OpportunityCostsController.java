@@ -19,64 +19,50 @@ public class OpportunityCostsController {
 	@Autowired
 	private OpportunityCostsService opportunityCostsService;
 
-//	@RequestParam(value="cc", defaultValue="USD") String cc,
-//	@RequestParam(value="date", defaultValue="20161013") String date,
-	
 	@RequestMapping("/cost")
 	String getCost(@RequestBody Asset asset,
 			@RequestParam(value="cc") String cc,
-			@RequestParam(value="date") String date,
-			@AuthenticationPrincipal final UserDetails user) {
-		return opportunityCostsService.getCostByDate(asset, cc, date, user);
+			@RequestParam(value="date") String date) {
+		return opportunityCostsService.getCostByDate(asset, cc, date);
 	}
 
 	@RequestMapping("/costtoday")
 	String getCostToday(@RequestBody Asset asset,
-			@RequestParam(value="cc") String cc,
-			@AuthenticationPrincipal final UserDetails user) {
-		return opportunityCostsService.getCostByToday(asset, cc, user);
+			@RequestParam(value="cc") String cc) {
+		return opportunityCostsService.getCostByToday(asset, cc);
 	}
 	
 	@RequestMapping("/costall")
 	Map<String, String> getCostAll(@RequestBody Asset asset,
 			@RequestParam(value="cc") String cc,
-			@RequestParam(value="date") String date,
-			@AuthenticationPrincipal final UserDetails user) {
-		return opportunityCostsService.getCostByDateAll(asset, cc, date, user);
+			@RequestParam(value="date") String date) {
+		return opportunityCostsService.getCostByDateAll(asset, date);
 	}
 
 	@RequestMapping("/costtodayall")
-	Map<String, String> getCostTodayAll(@RequestBody Asset asset,
-			@RequestParam(value="cc") String cc,
-			@AuthenticationPrincipal final UserDetails user) {
-		return opportunityCostsService.getCostByTodayAll(asset, cc, user);
+	Map<String, String> getCostTodayAll(@RequestBody Asset asset) {
+		return opportunityCostsService.getCostByTodayAll(asset);
 	}
 	
 	@RequestMapping("/opportunitytodayall")
-	Map<String, String> getOpportunityByTodayAll(@RequestBody Asset asset,
-			@RequestParam(value="cc") String cc,
-			@AuthenticationPrincipal final UserDetails user) {
-		return opportunityCostsService.getOpportunityByTodayAll(asset, cc, user);
+	Map<String, String> getOpportunityByTodayAll(@RequestBody Asset asset) {
+		return opportunityCostsService.getOpportunityByTodayAll(asset);
 	}
 	
 	@RequestMapping("/opportunitybydateall")
 	Map<String, String> getOpportunityByDateAll(@RequestBody Asset asset,
-			@RequestParam(value="cc") String cc,
-			@RequestParam(value="date") String date,
-			@AuthenticationPrincipal final UserDetails user) {
-		return opportunityCostsService.getOpportunityByDateAll(asset, cc, date, user);
+			@RequestParam(value="date") String date) {
+		return opportunityCostsService.getOpportunityByDateAll(asset, date);
 	}
 	
 	@RequestMapping("/opportunity")
-	Map<String, Map<String, String>> getOpportunity(@RequestBody Asset asset,
-			@AuthenticationPrincipal final UserDetails user) {
-		return opportunityCostsService.getOpportunity(asset, user);
+	Map<String, Map<String, String>> getOpportunity(@RequestBody Asset asset) {
+		return opportunityCostsService.getOpportunity(asset);
 	}
 	
 	@RequestMapping("/opportunitybydate")
 	Map<String, Map<String, String>> getOpportunity(@RequestBody Asset asset,
-			@RequestParam(value="date") String date,
-			@AuthenticationPrincipal final UserDetails user) {
-		return opportunityCostsService.getOpportunityByDate(asset, date, user);
+			@RequestParam(value="date") String date) {
+		return opportunityCostsService.getOpportunityByDate(asset, date);
 	}
 }
