@@ -115,13 +115,13 @@ public class RateServiceImpl implements RateService {
         sb.append( "&date=" );      
         sb.append( date );
         sb.append( "&json" );
-        log.info("getUrl() = " + sb.toString()); 
+//        log.info("getUrl() = " + sb.toString()); 
 		return sb.toString();	
 	}
 	
 	public Map<String, Rate> getAllRatesByDate(LocalDate start, LocalDate end, String cc) {
 		
-		log.info("getAllRatesByDate() cc = " + cc);
+//		log.info("getAllRatesByDate() cc = " + cc);
 		
 		Map<String, Rate> result = new HashMap();
 		
@@ -179,6 +179,7 @@ public class RateServiceImpl implements RateService {
 		RestTemplate restTemplate = new RestTemplate();
 		try {
     		rateNbu = restTemplate.getForObject(NBU_URL_ONGOING_DATE, RateNbu[].class);
+    		log.info("rateNbu " + rateNbu); 
     	} catch (RuntimeException e) {
         	return new ArrayList<RateNbu>();
         }
@@ -191,7 +192,7 @@ public class RateServiceImpl implements RateService {
 	@Override
 	public Rate getRateByDate(String date, String cc) {
 		
-		log.info("getRateByDate() date = " + date + " cc = " + cc); 
+//		log.info("getRateByDate() date = " + date + " cc = " + cc); 
 		
 		RateNbu r;
 		RateNbu[] rate = {};

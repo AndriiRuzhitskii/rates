@@ -30,10 +30,11 @@ public class CurrencyServiceImpl implements CurrencyService {
 	
 	@Override
 	public List<Currency> getAllCurrenciesOngoingDate() {
-		List<Currency> currencys;
+		List<Currency> currencyes;
 		List<RateNbu> rates = rateService.getAllRatesByOngoingDate();	
-		currencys = rateNbuConverter.convertList(rates);
-		return currencys;
+		currencyes = rateNbuConverter.convertList(rates);
+		currencyes.stream().forEach(System.out::println);
+		return currencyes;
 	}
 
 	@Override
