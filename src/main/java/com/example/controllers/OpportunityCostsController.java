@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.example.models.Asset;
 import com.example.services.OpportunityCostsService;
 
@@ -56,5 +57,26 @@ public class OpportunityCostsController {
 			@RequestParam(value="cc") String cc,
 			@AuthenticationPrincipal final UserDetails user) {
 		return opportunityCostsService.getOpportunityByTodayAll(asset, cc, user);
+	}
+	
+	@RequestMapping("/opportunitybydateall")
+	Map<String, String> getOpportunityByDateAll(@RequestBody Asset asset,
+			@RequestParam(value="cc") String cc,
+			@RequestParam(value="date") String date,
+			@AuthenticationPrincipal final UserDetails user) {
+		return opportunityCostsService.getOpportunityByDateAll(asset, cc, date, user);
+	}
+	
+	@RequestMapping("/opportunity")
+	Map<String, Map<String, String>> getOpportunity(@RequestBody Asset asset,
+			@AuthenticationPrincipal final UserDetails user) {
+		return opportunityCostsService.getOpportunity(asset, user);
+	}
+	
+	@RequestMapping("/opportunitybydate")
+	Map<String, Map<String, String>> getOpportunity(@RequestBody Asset asset,
+			@RequestParam(value="date") String date,
+			@AuthenticationPrincipal final UserDetails user) {
+		return opportunityCostsService.getOpportunityByDate(asset, date, user);
 	}
 }

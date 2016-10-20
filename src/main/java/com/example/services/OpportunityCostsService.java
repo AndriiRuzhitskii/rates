@@ -16,5 +16,6 @@ public interface OpportunityCostsService {
 	public Map<String, String> getCostByDateAll(@RequestBody Asset asset, String cc, @PathVariable String date, final UserDetails user);
 	public Map<String, String> getOpportunityByTodayAll(@RequestBody Asset asset, String cc, final UserDetails user);
 	public Map<String, String> getOpportunityByDateAll(@RequestBody Asset asset, String cc, @PathVariable String date, final UserDetails user);
-	public Map<String, String> getOpportunityAll(@RequestBody Asset asset, String cc, @PathVariable String date, final UserDetails user);
+	public Map<String, Map<String, String>> getOpportunity(@RequestBody Asset asset, final UserDetails user);
+	public Map<String, Map<String, String>> getOpportunityByDate(@RequestBody Asset asset, @PathVariable String date, final UserDetails user);
 }
