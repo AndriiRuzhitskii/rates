@@ -46,6 +46,7 @@ public class OpportunityCostsServiceImpl implements OpportunityCostsService {
 				currency);
 		Rate rateByCurrentDate = rateService.getRateByDateFromDb(
 				LocalDate.now(), currency);
+		log.info("cc = " + cc);
 		return calculateCost(assetAmount, rateByAssetDate, rateByCurrentDate);
 	}
 
@@ -58,6 +59,7 @@ public class OpportunityCostsServiceImpl implements OpportunityCostsService {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 		LocalDate localDate = LocalDate.parse(date, formatter);
 		Rate rateByDate = rateService.getRateByDateFromDb(localDate, currency);
+		log.info("cc = " + cc);
 		return calculateCost(assetAmount, rateByAssetDate, rateByDate);
 	}
 
@@ -131,15 +133,20 @@ public class OpportunityCostsServiceImpl implements OpportunityCostsService {
 		float rateCurrrent = rateByDate.getRate();
 		float rateDiff = rateCurrrent - ratePast;
 		float currencyAmount = assetAmount / ratePast;
-		float opportunity = currencyAmount * rateDiff;
+		float cost = currencyAmount * rateDiff;
 
 		log.info("----------");
 		log.info("ratePast = " + ratePast);
 		log.info("rateCurrrent = " + rateCurrrent);
 		log.info("rateDiff = " + rateDiff);
 		log.info("currencyAmount = " + currencyAmount);
-		log.info("opportunity = " + opportunity);
+		log.info("cost = " + cost);
 
+		return Float.toString(cost);
+	}
+	
+	private String calculateOpportunity(String costOfAsset, String alternativeCost) {
+		float opportunity = Float.valueOf(alternativeCost) - Float.valueOf(costOfAsset);
 		return Float.toString(opportunity);
 	}
 
@@ -161,21 +168,17 @@ public class OpportunityCostsServiceImpl implements OpportunityCostsService {
 
 	private Map<String, String> calculateOpportunityCostByDate(Asset asset,
 			String date) {
-		Map<String, String> original = new HashMap();
-		original = calculateCostByDateAll(asset, date);
-
-		String cost = original.get(asset.getCurrency().getCc());
-
-		Map<String, String> copy = original
+		Map<String, String> costs = new HashMap();
+		costs = calculateCostByDateAll(asset, date);
+		String cost = costs.get(asset.getCurrency().getCc());
+		Map<String, String> opportunities = costs
 				.entrySet()
 				.stream()
 				.collect(
 						Collectors.toMap(
 								Map.Entry::getKey,
-								e -> Float.toString(Float.valueOf(e.getValue())
-										- Float.valueOf(cost))));
-
-		return copy;
+								e -> calculateOpportunity(e.getValue(), cost)));
+		return opportunities;
 	}
 
 	private Map<String, Map<String, String>> calculateOpportunityCostForAsset(
