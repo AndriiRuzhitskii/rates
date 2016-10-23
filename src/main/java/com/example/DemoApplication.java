@@ -1,30 +1,25 @@
 package com.example;
 
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;
-
+import com.example.services.AccountService;
+import com.example.services.CurrencyService;
 import com.example.services.RateServiceImpl;
 
 @SpringBootApplication
 public class DemoApplication {
 
 	@Autowired
-	private RateServiceImpl service;
+	private CurrencyService currencyService;
+	
+	@Autowired
+	private RateServiceImpl rateService;
+	
+	@Autowired
+	private AccountService accountService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
@@ -33,8 +28,19 @@ public class DemoApplication {
 	@Bean
 	public CommandLineRunner demo() {
 		return (args) -> {
-			service.getNbuRates();
+			currencyService.getCurrencies();
+			rateService.getNbuRates();
+			accountService.createAccountOnInit();
 		};
 	}
+	
+//	@Bean
+//	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+//	    ObjectMapper mapper = new ObjectMapper();
+//	    mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+//	    MappingJackson2HttpMessageConverter converter = 
+//	        new MappingJackson2HttpMessageConverter(mapper);
+//	    return converter;
+//	}
 	
 }
