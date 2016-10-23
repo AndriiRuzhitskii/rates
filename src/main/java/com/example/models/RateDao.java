@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 public interface RateDao extends CrudRepository<Rate, Long> {
 	List<Rate> findByExchangedate(String exchangedate);
-//	List<Rate> findByCc(String cc);
+	Rate findByExchangedateAndCurrency(String exchangedate, Currency currency);
 	
 //    @Query("SELECT AVG(r.rate) FROM Rate r WHERE r.cc=?1")
 //    Long getAverage(String cc);

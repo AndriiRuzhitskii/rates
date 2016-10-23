@@ -10,14 +10,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+
 import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
 import com.example.DemoApplication;
 import com.example.converters.RateConverter;
+import com.example.models.Currency;
 import com.example.models.CurrencyDao;
 import com.example.models.Rate;
 import com.example.models.RateDao;
@@ -111,10 +115,13 @@ public class RateServiceImpl implements RateService {
         sb.append( "&date=" );      
         sb.append( date );
         sb.append( "&json" );
+//        log.info("getUrl() = " + sb.toString()); 
 		return sb.toString();	
 	}
 	
 	public Map<String, Rate> getAllRatesByDate(LocalDate start, LocalDate end, String cc) {
+		
+//		log.info("getAllRatesByDate() cc = " + cc);
 		
 		Map<String, Rate> result = new HashMap();
 		
@@ -133,10 +140,13 @@ public class RateServiceImpl implements RateService {
 	}
 	
 	public boolean saveRatesToDb(Map<String, Rate> rates) {
+		
+		log.info("saveRatesToDb() rates.size() = " + rates.size());
+		
 		// TODO May be change input param type
 		List<Rate> list = rates.entrySet().stream().map(map -> map.getValue())
                 .collect(Collectors.toList());
-//		list.stream().forEach(System.out::println);
+		list.stream().forEach(System.out::println);
 		list.stream().forEach(d -> repository.save(d));
 
 		return true; // TODO Change return
@@ -153,13 +163,14 @@ public class RateServiceImpl implements RateService {
 
 	public void getNbuRates() {
 		log.info("getNbuRates()");
-		LocalDate start = LocalDate.parse("2016-09-20"), // 1998-01-01
+		LocalDate start = LocalDate.parse("2016-10-10"), // 1998-01-01
 		end = LocalDate.now();
 		saveRatesToDb(getAllRatesByDate(start, end, "USD"));
 		saveRatesToDb(getAllRatesByDate(start, end, "EUR"));
 		saveRatesToDb(getAllRatesByDate(start, end, "RUB"));
 		saveRatesToDb(getAllRatesByDate(start, end, "XAU"));
 		saveRatesToDb(getAllRatesByDate(start, end, "XAG"));
+		saveRatesToDb(getAllRatesByDate(start, end, "GBP"));
 	}
 
 	@Override
@@ -169,6 +180,7 @@ public class RateServiceImpl implements RateService {
 		RestTemplate restTemplate = new RestTemplate();
 		try {
     		rateNbu = restTemplate.getForObject(NBU_URL_ONGOING_DATE, RateNbu[].class);
+    		log.info("rateNbu " + rateNbu); 
     	} catch (RuntimeException e) {
         	return new ArrayList<RateNbu>();
         }
@@ -180,6 +192,9 @@ public class RateServiceImpl implements RateService {
 
 	@Override
 	public Rate getRateByDate(String date, String cc) {
+		
+//		log.info("getRateByDate() date = " + date + " cc = " + cc); 
+		
 		RateNbu r;
 		RateNbu[] rate = {};
 		RestTemplate restTemplate = new RestTemplate();
@@ -195,6 +210,13 @@ public class RateServiceImpl implements RateService {
     	}    
     	Rate result = rateConverter.convert(r);
 		return result;	
+	}
+
+	@Override
+	public Rate getRateByDateFromDb(LocalDate date, Currency currency) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+		String formattedString = date.format(formatter);	
+		return repository.findByExchangedateAndCurrency(formattedString, currency);
 	}
 
 }

@@ -12,5 +12,6 @@ public interface AccountService {
 	public Account create(@RequestBody Account account);
 	public void delete(@PathVariable Long id);
 	public Account update(@PathVariable Long id, @RequestBody Account account);
+	public Account findByUsername(String username);
 	public void createAccountOnInit();
 }
