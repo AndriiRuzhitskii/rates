@@ -5,20 +5,27 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+
 import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
 import com.example.DemoApplication;
 import com.example.converters.RateConverter;
 import com.example.models.CurrencyDao;
+import com.example.models.Property;
+import com.example.models.PropertyDao;
 import com.example.models.Rate;
 import com.example.models.RateDao;
 import com.example.models.RateNbu;
@@ -36,6 +43,9 @@ public class RateServiceImpl implements RateService {
 	
 	@Autowired
 	private CurrencyDao currencyRepository;
+	
+	@Autowired
+	private PropertyDao propertyRepository;
 
 	@Resource
 	private RateConverter rateConverter;
@@ -152,6 +162,15 @@ public class RateServiceImpl implements RateService {
 	}
 
 	public void getNbuRates() {
+//		log.info("propertyRepository.getPropertiesByName(currency_loaded).size() = " + 
+//				propertyRepository.getPropertiesByName("currency_loaded").size());
+		
+		List<Property> lp = (List<Property>) propertyRepository.findAll(); 
+		log.info("propertyRepository.findAll().size() = " + 
+				lp.size());		
+		
+		propertyRepository.getPropertiesByName("currency_loaded");
+		
 		log.info("getNbuRates()");
 		LocalDate start = LocalDate.parse("2016-09-20"), // 1998-01-01
 		end = LocalDate.now();
@@ -163,19 +182,19 @@ public class RateServiceImpl implements RateService {
 	}
 
 	@Override
-	public List<RateNbu> getAllRatesByOngoingDate() {
+	public Set<RateNbu> getAllRatesByOngoingDate() {
 		
 		RateNbu[] rateNbu = {};
 		RestTemplate restTemplate = new RestTemplate();
 		try {
     		rateNbu = restTemplate.getForObject(NBU_URL_ONGOING_DATE, RateNbu[].class);
     	} catch (RuntimeException e) {
-        	return new ArrayList<RateNbu>();
+        	return new HashSet<RateNbu>();
         }
 		
 		List<RateNbu> listNbu = Arrays.asList(rateNbu);
-		
-		return listNbu;
+		Set<RateNbu> setNbu = new HashSet(listNbu);
+		return setNbu;
 	}
 
 	@Override
