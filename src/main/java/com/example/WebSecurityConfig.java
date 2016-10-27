@@ -13,25 +13,34 @@ import org.springframework.http.HttpMethod;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//    	http.httpBasic().and().authorizeRequests().
-//		antMatchers(HttpMethod.GET, "/rate").hasRole("USER").
-//		antMatchers(HttpMethod.GET, "/ratebyname").hasRole("USER").
-//		antMatchers(HttpMethod.GET, "/ratebydate").hasRole("USER").
-//		antMatchers(HttpMethod.GET, "/rateaverage").hasRole("USER").
-//		antMatchers(HttpMethod.GET, "/ratemin").hasRole("USER").
-//		antMatchers(HttpMethod.GET, "/ratemax").hasRole("USER").
-//		and().csrf().disable();
-    	
+
+    	// For application use   	
     	http.authorizeRequests().anyRequest().fullyAuthenticated().and().
         httpBasic().and().
         csrf().disable();
     	
+    	// for H2 console use by url:
+    	// http://localhost:8080/console
+//        http.authorizeRequests().antMatchers("/").permitAll().and()
+//        .authorizeRequests().antMatchers("/console/**").permitAll();
+//        http.csrf().disable();
+//        http.headers().frameOptions().disable();
     }
 
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//            .inMemoryAuthentication()
-//                .withUser("user1").password("password").roles("USER");
-//    }
 }
+
+//http.httpBasic().and().authorizeRequests().
+//antMatchers(HttpMethod.GET, "/rate").hasRole("USER").
+//antMatchers(HttpMethod.GET, "/ratebyname").hasRole("USER").
+//antMatchers(HttpMethod.GET, "/ratebydate").hasRole("USER").
+//antMatchers(HttpMethod.GET, "/rateaverage").hasRole("USER").
+//antMatchers(HttpMethod.GET, "/ratemin").hasRole("USER").
+//antMatchers(HttpMethod.GET, "/ratemax").hasRole("USER").
+//and().csrf().disable();
+
+//@Autowired
+//public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//  auth
+//      .inMemoryAuthentication()
+//          .withUser("user1").password("password").roles("USER");
+//}

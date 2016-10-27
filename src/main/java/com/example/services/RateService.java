@@ -3,6 +3,7 @@ package com.example.services;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.example.models.Currency;
 import com.example.models.Rate;
@@ -32,7 +33,7 @@ public interface RateService {
 
 	public Map<String, Rate> getAllRatesByDate(LocalDate start, LocalDate end, String cc);
 	
-	public List<RateNbu> getAllRatesByOngoingDate();
-	
+	public Set<RateNbu> getAllRatesByOngoingDate();
+		
 	public Rate getRateByDateFromDb(LocalDate date, Currency currency);
 }

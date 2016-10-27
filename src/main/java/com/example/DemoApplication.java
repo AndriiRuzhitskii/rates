@@ -5,7 +5,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import com.example.services.AccountService;
 import com.example.services.CurrencyService;
 import com.example.services.RateServiceImpl;
 
@@ -18,9 +17,6 @@ public class DemoApplication {
 	@Autowired
 	private RateServiceImpl rateService;
 	
-	@Autowired
-	private AccountService accountService;
-
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}
@@ -30,7 +26,6 @@ public class DemoApplication {
 		return (args) -> {
 			currencyService.getCurrencies();
 			rateService.getNbuRates();
-			accountService.createAccountOnInit();
 		};
 	}
 	

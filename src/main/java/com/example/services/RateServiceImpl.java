@@ -5,8 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
@@ -23,6 +25,8 @@ import com.example.DemoApplication;
 import com.example.converters.RateConverter;
 import com.example.models.Currency;
 import com.example.models.CurrencyDao;
+import com.example.models.Property;
+import com.example.models.PropertyDao;
 import com.example.models.Rate;
 import com.example.models.RateDao;
 import com.example.models.RateNbu;
@@ -30,8 +34,8 @@ import com.example.models.RateNbu;
 @Service
 public class RateServiceImpl implements RateService {
 	
-	private static final String NBU_URL = "http://bank.gov.ua/NBUStatService/v1/statdirectory/exchange";
-	private static final String NBU_URL_ONGOING_DATE = "http://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
+//	private static final String NBU_URL = "http://bank.gov.ua/NBUStatService/v1/statdirectory/exchange";
+//	private static final String NBU_URL_ONGOING_DATE = "http://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
 	private static StringBuilder sb = new StringBuilder();
 	private static final Logger log = LoggerFactory.getLogger(DemoApplication.class);
 	
@@ -40,6 +44,9 @@ public class RateServiceImpl implements RateService {
 	
 	@Autowired
 	private CurrencyDao currencyRepository;
+	
+	@Autowired
+	private PropertyDao propertyRepository;
 
 	@Resource
 	private RateConverter rateConverter;
@@ -108,15 +115,20 @@ public class RateServiceImpl implements RateService {
 //	}
 	
 	private String getUrl(String date, String cc) {
-		sb.delete( 0, sb.length() );
-		sb.append( NBU_URL );
-        sb.append( "?valcode=" );
-        sb.append( cc );
-        sb.append( "&date=" );      
-        sb.append( date );
-        sb.append( "&json" );
-//        log.info("getUrl() = " + sb.toString()); 
-		return sb.toString();	
+//		sb.delete( 0, sb.length() );
+//		sb.append( NBU_URL );
+//        sb.append( "?valcode=" );
+//        sb.append( cc );
+//        sb.append( "&date=" );      
+//        sb.append( date );
+//        sb.append( "&json" );
+//		return sb.toString();		
+		String fs;
+		fs = String.format(
+				propertyRepository.getPropertyByName("url_nbu_rate").getValue(),
+		cc, date);
+//		log.info(fs);
+		return fs;	
 	}
 	
 	public Map<String, Rate> getAllRatesByDate(LocalDate start, LocalDate end, String cc) {
@@ -162,32 +174,48 @@ public class RateServiceImpl implements RateService {
 	}
 
 	public void getNbuRates() {
+//		log.info("propertyRepository.getPropertiesByName(currency_loaded).size() = " + 
+//				propertyRepository.getPropertiesByName("currency_loaded").size());
+		
+		List<Property> lp = (List<Property>) propertyRepository.findAll(); 
+//		log.info("propertyRepository.findAll().size() = " + 
+//				lp.size());		
+		
+		
+		
 		log.info("getNbuRates()");
-		LocalDate start = LocalDate.parse("2016-10-10"), // 1998-01-01
+
+		LocalDate start = LocalDate.parse(
+				propertyRepository.getPropertyByName("currency_load_from").getValue()
+				),
 		end = LocalDate.now();
-		saveRatesToDb(getAllRatesByDate(start, end, "USD"));
-		saveRatesToDb(getAllRatesByDate(start, end, "EUR"));
-		saveRatesToDb(getAllRatesByDate(start, end, "RUB"));
-		saveRatesToDb(getAllRatesByDate(start, end, "XAU"));
-		saveRatesToDb(getAllRatesByDate(start, end, "XAG"));
-		saveRatesToDb(getAllRatesByDate(start, end, "GBP"));
+		
+//		saveRatesToDb(getAllRatesByDate(start, end, "USD"));
+//		saveRatesToDb(getAllRatesByDate(start, end, "EUR"));
+//		saveRatesToDb(getAllRatesByDate(start, end, "RUB"));
+//		saveRatesToDb(getAllRatesByDate(start, end, "XAU"));
+//		saveRatesToDb(getAllRatesByDate(start, end, "XAG"));
+		
+		propertyRepository.getPropertiesByName("currency_loaded").
+			stream().forEach(d -> saveRatesToDb(getAllRatesByDate(start, end, d.getValue())));
 	}
 
 	@Override
-	public List<RateNbu> getAllRatesByOngoingDate() {
+	public Set<RateNbu> getAllRatesByOngoingDate() {
 		
 		RateNbu[] rateNbu = {};
 		RestTemplate restTemplate = new RestTemplate();
 		try {
-    		rateNbu = restTemplate.getForObject(NBU_URL_ONGOING_DATE, RateNbu[].class);
-    		log.info("rateNbu " + rateNbu); 
+    		rateNbu = restTemplate.getForObject(
+    				propertyRepository.getPropertyByName("url_nbu_rates_ongoing_date").getValue()   //NBU_URL_ONGOING_DATE
+    				, RateNbu[].class);
     	} catch (RuntimeException e) {
-        	return new ArrayList<RateNbu>();
+        	return new HashSet<RateNbu>();
         }
 		
 		List<RateNbu> listNbu = Arrays.asList(rateNbu);
-		
-		return listNbu;
+		Set<RateNbu> setNbu = new HashSet(listNbu);
+		return setNbu;
 	}
 
 	@Override

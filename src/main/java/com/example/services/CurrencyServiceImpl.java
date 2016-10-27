@@ -1,14 +1,12 @@
 package com.example.services;
 
 import java.util.List;
-
+import java.util.Set;
 import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.DemoApplication;
 import com.example.converters.RateNbuConverter;
 import com.example.models.Currency;
@@ -29,16 +27,25 @@ public class CurrencyServiceImpl implements CurrencyService {
 	private RateNbuConverter rateNbuConverter;
 	
 	@Override
-	public List<Currency> getAllCurrenciesOngoingDate() {
-		List<Currency> currencyes;
-		List<RateNbu> rates = rateService.getAllRatesByOngoingDate();	
-		currencyes = rateNbuConverter.convertList(rates);
-		currencyes.stream().forEach(System.out::println);
-		return currencyes;
+	public Set<Currency> getAllCurrenciesOngoingDate() {
+		Set<Currency> currencys;
+		Set<RateNbu> rates = rateService.getAllRatesByOngoingDate();
+//		rates.stream().forEach(System.out::println);
+		currencys = rateNbuConverter.convertList(rates);
+		return currencys;
+//=======
+//	public List<Currency> getAllCurrenciesOngoingDate() {
+//		List<Currency> currencyes;
+//		List<RateNbu> rates = rateService.getAllRatesByOngoingDate();	
+//		currencyes = rateNbuConverter.convertList(rates);
+//		currencyes.stream().forEach(System.out::println);
+//		return currencyes;
+//>>>>>>> master
 	}
 
 	@Override
-	public boolean saveCurrenciesToDb(List<Currency> currencies) {
+	public boolean saveCurrenciesToDb(Set<Currency> currencies) {
+//		currencies.stream().forEach(System.out::println);
 		currencies.stream().forEach(d -> currencyDao.save(d));
 		return true;
 	}

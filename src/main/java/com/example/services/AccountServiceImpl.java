@@ -47,9 +47,13 @@ public class AccountServiceImpl implements AccountService {
 	public void createAccountOnInit() {
 		log.info("createAccountOnInit()");
 		accountRepository.save(new Account("user", "password"));
-		log.info("accountRepository.findAll() = ");
-		List<Account> list = (List<Account>) accountRepository.findAll();
-		list.stream().forEach(System.out::println);
+		accountRepository.findAll().forEach(System.out::println);
+
+//		log.info("createAccountOnInit()");
+//		accountRepository.save(new Account("user", "password"));
+//		log.info("accountRepository.findAll() = ");
+//		List<Account> list = (List<Account>) accountRepository.findAll();
+//		list.stream().forEach(System.out::println);
 	}
 
 	@Override

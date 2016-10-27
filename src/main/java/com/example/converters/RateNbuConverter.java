@@ -2,8 +2,10 @@ package com.example.converters;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,12 +47,12 @@ public final class RateNbuConverter implements Converter<RateNbu, Currency> {
 //	    return dest;
 //	}
 
-	public List<Currency> convertList (final List<RateNbu> source) {
-	    List<Currency> dest = new ArrayList();
+	public Set<Currency> convertList (final Set<RateNbu> source) {
+	    Set<Currency> dest = new HashSet();
 	    Map<RateNbu, Currency> result = new HashMap();
 	    result.putAll(source.stream().collect(Collectors.toMap(d -> d, d -> this.convert(d))));
 	    dest = result.entrySet().stream().map(map -> map.getValue())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 	    return dest;
 	}
 	
