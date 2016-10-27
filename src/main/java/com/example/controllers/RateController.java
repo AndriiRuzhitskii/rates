@@ -20,7 +20,7 @@ import com.example.services.RateService;
 @RestController
 public class RateController {
 	
-	private static final String NBU_URL = "http://bank.gov.ua/NBUStatService/v1/statdirectory/exchange";
+//	private static final String NBU_URL = "http://bank.gov.ua/NBUStatService/v1/statdirectory/exchange";
 	private static StringBuilder sb = new StringBuilder();
 	private static final Logger log = LoggerFactory.getLogger(DemoApplication.class);
 	
@@ -45,7 +45,7 @@ public class RateController {
       
     @RequestMapping("/ratebydate")
     List<Rate> getRateByDate(@RequestParam(value="date", defaultValue="01.01.2016") String date) {
-    	System.out.println("date = " + date);
+//    	System.out.println("date = " + date);
     	if(Utilities.isValidFormat("dd.MM.yyyy", date)) {
     		List<Rate> rates = (List<Rate>) service.findByExchangedate(date);
     		return rates;

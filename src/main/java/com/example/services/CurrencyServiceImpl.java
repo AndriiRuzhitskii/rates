@@ -33,7 +33,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 	public Set<Currency> getAllCurrenciesOngoingDate() {
 		Set<Currency> currencys;
 		Set<RateNbu> rates = rateService.getAllRatesByOngoingDate();
-		rates.stream().forEach(System.out::println);
+//		rates.stream().forEach(System.out::println);
 		currencys = rateNbuConverter.convertList(rates);
 		return currencys;
 	}

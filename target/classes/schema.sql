@@ -1,14 +1,14 @@
 CREATE TABLE IF NOT EXISTS `Account` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,
-    `PASSWORD` varchar(200) NOT NULL,
-    `USERNAME` varchar(200) NOT NULL,
+    `password` varchar(200) NOT NULL,
+    `username` varchar(200) NOT NULL,
     PRIMARY KEY (`id`)
 );
 CREATE TABLE IF NOT EXISTS `Rate` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,
-    `EXCHANGEDATE` varchar(200) NOT NULL,
-    `RATE` varchar(200) NOT NULL,
-    `CURRENCY_ID` varchar(200) NOT NULL,
+    `exchangedate` varchar(200) NOT NULL,
+    `rate` varchar(200) NOT NULL,
+    `currency_id` varchar(200) NOT NULL,
     PRIMARY KEY (`id`)
 );
 CREATE TABLE IF NOT EXISTS `Currency` (
@@ -24,5 +24,6 @@ CREATE TABLE IF NOT EXISTS `Property` (
     `property_id` bigint(20) NOT NULL AUTO_INCREMENT,
     `prop_name` varchar(200) NOT NULL,
     `prop_value` varchar(200) NOT NULL,
+    `prop_explanation` varchar(400),
     PRIMARY KEY (`property_id`)
 );

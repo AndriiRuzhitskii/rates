@@ -45,8 +45,9 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public void createAccountOnInit() {
-		log.info("createAccountOnInit()");
-		accountRepository.save(new Account("user", "password"));
+//		log.info("createAccountOnInit()");
+//		accountRepository.save(new Account("user", "password"));
+//		accountRepository.findAll().forEach(System.out::println);
 	}
 
 }

@@ -20,11 +20,11 @@ public class DemoApplication {
 	@Autowired
 	private RateServiceImpl rateService;
 	
-	@Autowired
-	private AccountService accountService;
+//	@Autowired
+//	private AccountService accountService;
 
-	@Autowired
-	private PropertyService propertyService;
+//	@Autowired
+//	private PropertyService propertyService;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
@@ -33,10 +33,10 @@ public class DemoApplication {
 	@Bean
 	public CommandLineRunner demo() {
 		return (args) -> {
-			propertyService.getPropertiesByName("currency_loaded").forEach(System.out::println);;
+//			propertyService.getPropertiesByName("currency_loaded").forEach(System.out::println);;
 			currencyService.getCurrencies();
 			rateService.getNbuRates();
-			accountService.createAccountOnInit();
+//			accountService.createAccountOnInit();
 		};
 	}
 	
