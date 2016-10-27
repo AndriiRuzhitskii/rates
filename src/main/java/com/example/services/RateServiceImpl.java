@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.example.DemoApplication;
 import com.example.converters.RateConverter;
+import com.example.models.Currency;
 import com.example.models.CurrencyDao;
 import com.example.models.Property;
 import com.example.models.PropertyDao;
@@ -132,6 +133,8 @@ public class RateServiceImpl implements RateService {
 	
 	public Map<String, Rate> getAllRatesByDate(LocalDate start, LocalDate end, String cc) {
 		
+//		log.info("getAllRatesByDate() cc = " + cc);
+		
 		Map<String, Rate> result = new HashMap();
 		
 		Stream<LocalDate> stream = LongStream.range(start.toEpochDay(),
@@ -149,6 +152,9 @@ public class RateServiceImpl implements RateService {
 	}
 	
 	public boolean saveRatesToDb(Map<String, Rate> rates) {
+		
+		log.info("saveRatesToDb() rates.size() = " + rates.size());
+		
 		// TODO May be change input param type
 		List<Rate> list = rates.entrySet().stream().map(map -> map.getValue())
                 .collect(Collectors.toList());
@@ -178,6 +184,7 @@ public class RateServiceImpl implements RateService {
 		
 		
 		log.info("getNbuRates()");
+
 		LocalDate start = LocalDate.parse(
 				propertyRepository.getPropertyByName("currency_load_from").getValue()
 				),
@@ -213,6 +220,9 @@ public class RateServiceImpl implements RateService {
 
 	@Override
 	public Rate getRateByDate(String date, String cc) {
+		
+//		log.info("getRateByDate() date = " + date + " cc = " + cc); 
+		
 		RateNbu r;
 		RateNbu[] rate = {};
 		RestTemplate restTemplate = new RestTemplate();
@@ -228,6 +238,13 @@ public class RateServiceImpl implements RateService {
     	}    
     	Rate result = rateConverter.convert(r);
 		return result;	
+	}
+
+	@Override
+	public Rate getRateByDateFromDb(LocalDate date, Currency currency) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+		String formattedString = date.format(formatter);	
+		return repository.findByExchangedateAndCurrency(formattedString, currency);
 	}
 
 }

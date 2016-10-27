@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.example.models.Currency;
 import com.example.models.Rate;
 import com.example.models.RateDao;
 import com.example.models.RateNbu;
@@ -34,4 +35,5 @@ public interface RateService {
 	
 	public Set<RateNbu> getAllRatesByOngoingDate();
 		
+	public Rate getRateByDateFromDb(LocalDate date, Currency currency);
 }

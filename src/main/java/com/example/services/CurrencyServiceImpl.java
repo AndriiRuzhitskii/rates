@@ -2,14 +2,11 @@ package com.example.services;
 
 import java.util.List;
 import java.util.Set;
-
 import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.DemoApplication;
 import com.example.converters.RateNbuConverter;
 import com.example.models.Currency;
@@ -36,6 +33,14 @@ public class CurrencyServiceImpl implements CurrencyService {
 //		rates.stream().forEach(System.out::println);
 		currencys = rateNbuConverter.convertList(rates);
 		return currencys;
+//=======
+//	public List<Currency> getAllCurrenciesOngoingDate() {
+//		List<Currency> currencyes;
+//		List<RateNbu> rates = rateService.getAllRatesByOngoingDate();	
+//		currencyes = rateNbuConverter.convertList(rates);
+//		currencyes.stream().forEach(System.out::println);
+//		return currencyes;
+//>>>>>>> master
 	}
 
 	@Override
@@ -47,6 +52,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
 	@Override
 	public boolean getCurrencies() {
+		log.info("getCurrencies()");
 		saveCurrenciesToDb(getAllCurrenciesOngoingDate());
 		return true;
 	}
@@ -54,6 +60,11 @@ public class CurrencyServiceImpl implements CurrencyService {
 	@Override
 	public List<Currency> getCurrenciesFromDb() {
 		return (List<Currency>) currencyDao.findAll();
+	}
+
+	@Override
+	public Currency getCurrencyByCc(String cc) {
+		return currencyDao.findByCc(cc);
 	}
 	
 }
