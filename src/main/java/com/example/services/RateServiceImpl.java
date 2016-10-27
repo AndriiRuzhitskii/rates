@@ -35,7 +35,7 @@ import com.example.models.RateNbu;
 public class RateServiceImpl implements RateService {
 	
 //	private static final String NBU_URL = "http://bank.gov.ua/NBUStatService/v1/statdirectory/exchange";
-	private static final String NBU_URL_ONGOING_DATE = "http://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
+//	private static final String NBU_URL_ONGOING_DATE = "http://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
 	private static StringBuilder sb = new StringBuilder();
 	private static final Logger log = LoggerFactory.getLogger(DemoApplication.class);
 	
